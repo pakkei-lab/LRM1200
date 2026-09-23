@@ -1,10 +1,5 @@
-# LRM1200 Explorer V2.1
+# LRM1200 Explorer V2.2
 
-- Full route: 1209.7 km
-- Forward: 604.7 km
-- Rebound: 605.0 km
-- Turnaround: track point 14,288, 26.933780, 114.404970
-- GPX explicit waypoints/routes: none. Start, northernmost turnaround, and finish are therefore displayed as operational CP markers.
-- OSM POIs: live access through Overpass API for the current viewport, followed by exact 200 m route filtering.
-- At Zoom 12 or above, press “載入目前畫面 OSM POI”.
-- GitHub Pages or a local HTTP server is recommended. Browser CORS/geolocation restrictions may prevent full functionality when index.html is opened directly as file://.
+POI logic: automatic loading 650 ms after map movement stops; paused below zoom 12; display limit 12/18/24/30 for zoom 12/13/14/15+; category priority bicycle, fuel, convenience, hotel, restaurant; spatial grid distribution; cached viewport results; active request cancellation; 8% query padding; no route-distance filter. POI copy includes name and OSM address. A round loading indicator appears at the bottom.
+
+Deploy using GitHub Pages or another HTTPS server. Direct file:// access can block API, clipboard, and geolocation functions.
