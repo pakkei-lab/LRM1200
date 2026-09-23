@@ -1,19 +1,10 @@
-# LRM1200 Explorer V2.0 · OSM
+# LRM1200 Explorer V2.1
 
-Generated from `lushu-5630109.gpx`.
-
-- Route length: 1209.7 km
-- Original track points: 28,626
-- Optimized display points: 5,874
-- OSM POIs within 200 m: 0
-- Categories: restaurant, fuel, convenience, hotel/guest house/hostel/motel, bicycle shop
-- GPX waypoints: 0
-
-## GitHub Pages
-Upload this folder to a GitHub repository, then enable Pages from the main branch root. HTTPS is required for device geolocation.
-
-## Data and map
-Route and POIs are stored locally. The raster basemap is loaded online from OpenStreetMap and must not be bulk-downloaded. Keep the visible OSM attribution.
-
-## Refresh POIs
-The generated POIs are a snapshot. Run `scripts/README.txt` guidance to repeat the Overpass extraction if needed.
+- Full route: 1209.7 km
+- Forward: 604.7 km
+- Rebound: 605.0 km
+- Turnaround: track point 14,288, 26.933780, 114.404970
+- GPX explicit waypoints/routes: none. Start, northernmost turnaround, and finish are therefore displayed as operational CP markers.
+- OSM POIs: live access through Overpass API for the current viewport, followed by exact 200 m route filtering.
+- At Zoom 12 or above, press “載入目前畫面 OSM POI”.
+- GitHub Pages or a local HTTP server is recommended. Browser CORS/geolocation restrictions may prevent full functionality when index.html is opened directly as file://.

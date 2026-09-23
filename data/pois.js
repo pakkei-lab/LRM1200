@@ -1,1 +1,0 @@
-window.POIS=[{"name":"起點","type":"start","lat":23.56218,"lon":113.61349,"distance":0},{"name":"終點","type":"finish","lat":23.56269,"lon":113.6133,"distance":0}];
