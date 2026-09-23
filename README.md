@@ -1,3 +1,8 @@
-# LRM1200 V2.3
+# LRM1200 V2.4
 
-If a POI has no OSM address tag, its copy button performs on-demand reverse geocoding from GPS coordinates. Results are cached and requests are rate-limited to at least one second apart. GPS coordinates are the final fallback. The loading circle displays the current zoom level, and the shortened title is right-aligned.
+- POIs are no longer loaded automatically.
+- A POI button is located directly under the map menu button.
+- Press POI to load OSM POIs in the current viewport.
+- The zoom-number loading circle appears directly below the POI button.
+- Route buttons are now 去程, 回程, and 全程.
+- Existing POI priority, maximum marker limits, copy-name-and-address, and GPS-address fallback are retained.
