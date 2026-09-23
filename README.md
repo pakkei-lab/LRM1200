@@ -1,5 +1,3 @@
-# LRM1200 Explorer V2.2
+# LRM1200 V2.3
 
-POI logic: automatic loading 650 ms after map movement stops; paused below zoom 12; display limit 12/18/24/30 for zoom 12/13/14/15+; category priority bicycle, fuel, convenience, hotel, restaurant; spatial grid distribution; cached viewport results; active request cancellation; 8% query padding; no route-distance filter. POI copy includes name and OSM address. A round loading indicator appears at the bottom.
-
-Deploy using GitHub Pages or another HTTPS server. Direct file:// access can block API, clipboard, and geolocation functions.
+If a POI has no OSM address tag, its copy button performs on-demand reverse geocoding from GPS coordinates. Results are cached and requests are rate-limited to at least one second apart. GPS coordinates are the final fallback. The loading circle displays the current zoom level, and the shortened title is right-aligned.
