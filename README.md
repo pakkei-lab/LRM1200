@@ -1,5 +1,12 @@
-# LRM1200 V4.1
+# LRM1200 V4.2
 
-Restored the V3.2 application pattern on top of the latest split GPX route and CP data. Includes manual OSM POI loading, checked-category API queries, zoom-based POI limits, loading circle, ETA pacing, fixed departure dates/times, Forward/Reverse/Full display, device location, Start/turnaround/Finish CPs, and Baidu CP links.
+Based on V4.1 and the V3.2 application pattern.
 
-The updated reverse GPX labels its first return-side control point as CP5.5 638 km. The ETA menu therefore uses Return CP at 604 km as the October 4 departure anchor while preserving the V3.2 four-anchor calculation pattern.
+Changes:
+- Renamed the reverse-route waypoint from CP5.5 638 km to CP6.5 638 km.
+- Start CP ETA remains equal to the selected Start departure time.
+- CP3.5 ETA is calculated from the Start CP departure.
+- CP6.5 ETA is calculated from the CP3.5 departure.
+- CP9.5 ETA is calculated from the CP6.5 departure.
+- The selected departure times at CP3.5, CP6.5, and CP9.5 remain the calculation anchors for subsequent CPs.
+- OSM POI loading, checked-category queries, POI limits, loading circle, route controls, GPS position, Baidu links, and clipboard behavior are retained.
