@@ -1,3 +1,7 @@
-# LRM1200 V3.2
+# LRM1200 V3.3
 
-ETA is calculated by cumulative CP distance and selected pacing. The calculation restarts from the configured departure at Start CP (0 km), CP3.5 (320 km), CP6.5 (646 km), and CP9.5 (963 km). Dates are fixed to 2026-10-02/03/04/05; departure times and pacing are adjustable. ETA appears below each CP name as MM/DD HH:mm.
+- Fixed all CP popup cards to the same width.
+- Start CP ETA remains exactly its departure time.
+- CP3.5, CP6.5, and CP9.5 ETA values are calculated from the previous departure anchor rather than displaying their own departure times.
+- Departure times at CP3.5, CP6.5, and CP9.5 still become the anchors for the following course segments.
+- Purple overlapping CP markers display no number.
