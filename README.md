@@ -1,6 +1,8 @@
-# LRM1200 V2.9
+# LRM1200 V3.0
 
-- Forward and Reverse routes come from the two split GPX files.
-- Fixed CPs are read from both route GPX files and are always visible. Overlapping CPs are grouped and all information is shown in one popup.
-- Dynamic OSM POIs follow V2.5 rules: manual POI button, Zoom 12 minimum, checked categories only, hotels/restaurants off by default, 12/18/24/30 display caps, restaurant lowest priority, and loading circle.
-- Dynamic OSM POIs may be disabled with the menu switch; fixed CPs remain visible.
+Changes from V2.9:
+- Removed the separate “Enable dynamic OSM POI” checkbox.
+- Route selection labels are now 去程 / 回程 / 全程.
+- Fixed CP Baidu hyperlink labels are forced to white text.
+- Every dynamic OSM POI popup includes a button that copies `Latitude, Longitude` to the clipboard, separated by a comma.
+- Fixed CPs remain always visible; OSM POIs remain controlled by category checkboxes and the manual POI button.
