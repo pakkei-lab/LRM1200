@@ -1,8 +1,12 @@
-# LRM1200 V2.6
+# LRM1200 V2.7
 
-- Map menu and POI controls are circular and match the 38 px loading-circle size.
-- Menu route and utility buttons use rounded pill styling.
-- The old POI copy-name/address action is removed.
-- Every POI popup now provides “在百度地圖開啟”.
-- The Baidu Maps URI receives the POI's WGS84 latitude/longitude and explicitly sets coord_type=wgs84 to avoid China coordinate offset.
-- V2.5 checked-category querying and default POI selections are retained.
+Built from the earlier rounded-button V2.6 design, with the fixed control-point GPX layer added.
+
+- Circular 38 px menu and POI controls matching the loading circle.
+- Rounded route and utility buttons.
+- 15 fixed CP waypoints loaded separately from dynamic OSM POIs.
+- 7 fixed CPs assigned to 去程 and 8 to 回程 based on cumulative route distance and the 604.74 km turnaround.
+- 去程 shows forward CPs, 回程 shows rebound CPs, and 全程 shows all fixed CPs.
+- Both fixed CPs and dynamic OSM POIs include a Baidu Maps hyperlink.
+- Baidu URI links pass WGS84 coordinates with coord_type=wgs84.
+- Dynamic POI queries continue to request only checked categories.
