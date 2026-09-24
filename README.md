@@ -1,3 +1,5 @@
-# LRM1200 V3.2
+# LRM1200 V4.1
 
-ETA is calculated by cumulative CP distance and selected pacing. The calculation restarts from the configured departure at Start CP (0 km), CP3.5 (320 km), CP6.5 (646 km), and CP9.5 (963 km). Dates are fixed to 2026-10-02/03/04/05; departure times and pacing are adjustable. ETA appears below each CP name as MM/DD HH:mm.
+Restored the V3.2 application pattern on top of the latest split GPX route and CP data. Includes manual OSM POI loading, checked-category API queries, zoom-based POI limits, loading circle, ETA pacing, fixed departure dates/times, Forward/Reverse/Full display, device location, Start/turnaround/Finish CPs, and Baidu CP links.
+
+The updated reverse GPX labels its first return-side control point as CP5.5 638 km. The ETA menu therefore uses Return CP at 604 km as the October 4 departure anchor while preserving the V3.2 four-anchor calculation pattern.
