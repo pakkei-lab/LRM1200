@@ -1,0 +1,455 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <meta name="theme-color" content="#10271f" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <title>Cycling Trip Packing Checklist</title>
+  <style>
+    :root {
+      --forest: #10271f;
+      --forest-2: #18392d;
+      --card: rgba(255,255,255,.96);
+      --sand: #f5f1e8;
+      --ink: #17211d;
+      --muted: #68736d;
+      --accent: #ffb627;
+      --accent-2: #f47b35;
+      --green: #2d8b61;
+      --line: #e5e9e6;
+      --shadow: 0 14px 32px rgba(4,22,15,.16);
+    }
+
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      min-height: 100vh;
+      color: var(--ink);
+      font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", Arial, "PingFang HK", "Noto Sans TC", sans-serif;
+      background:
+        radial-gradient(circle at 92% 2%, rgba(255,182,39,.28), transparent 28%),
+        linear-gradient(160deg, var(--forest) 0 23rem, var(--sand) 23rem 100%);
+      -webkit-font-smoothing: antialiased;
+    }
+
+    button, input { font: inherit; }
+    button { -webkit-tap-highlight-color: transparent; }
+
+    .app {
+      width: min(100%, 520px);
+      margin: 0 auto;
+      padding: max(22px, env(safe-area-inset-top)) 16px max(32px, env(safe-area-inset-bottom));
+    }
+
+    header { color: white; padding: 12px 4px 22px; }
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 13px;
+      font-size: .78rem;
+      font-weight: 800;
+      letter-spacing: .14em;
+      text-transform: uppercase;
+      color: #ffcf6b;
+    }
+    .eyebrow::before {
+      content: "";
+      width: 28px;
+      height: 2px;
+      border-radius: 99px;
+      background: currentColor;
+    }
+    h1 {
+      margin: 0;
+      max-width: 390px;
+      font-size: clamp(2rem, 9vw, 3rem);
+      line-height: .98;
+      letter-spacing: -.045em;
+    }
+    .subtitle {
+      margin: 13px 0 0;
+      color: rgba(255,255,255,.74);
+      font-size: .98rem;
+      line-height: 1.45;
+    }
+
+    .progress-card {
+      margin-top: 8px;
+      padding: 17px;
+      border: 1px solid rgba(255,255,255,.36);
+      border-radius: 22px;
+      background: rgba(255,255,255,.13);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      box-shadow: var(--shadow);
+      color: white;
+    }
+    .progress-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-end;
+      gap: 16px;
+    }
+    .progress-label { color: rgba(255,255,255,.72); font-size: .82rem; font-weight: 700; }
+    .progress-count { margin-top: 2px; font-size: 1.24rem; font-weight: 850; }
+    .progress-percent { font-size: 1.9rem; line-height: 1; font-weight: 900; color: #ffd36f; }
+    .track { height: 10px; margin-top: 13px; overflow: hidden; border-radius: 99px; background: rgba(255,255,255,.17); }
+    .fill { width: 0; height: 100%; border-radius: inherit; background: linear-gradient(90deg, var(--accent), #ffe28e); transition: width .28s ease; }
+
+    .toolbar {
+      position: sticky;
+      top: max(8px, env(safe-area-inset-top));
+      z-index: 10;
+      display: flex;
+      gap: 9px;
+      margin: 20px 0 14px;
+      padding: 7px;
+      border: 1px solid rgba(255,255,255,.7);
+      border-radius: 18px;
+      background: rgba(245,241,232,.82);
+      backdrop-filter: blur(15px);
+      -webkit-backdrop-filter: blur(15px);
+      box-shadow: 0 8px 26px rgba(20,39,31,.11);
+    }
+    .filter {
+      flex: 1;
+      min-height: 42px;
+      border: 0;
+      border-radius: 13px;
+      background: transparent;
+      color: #52605a;
+      font-size: .88rem;
+      font-weight: 800;
+      cursor: pointer;
+    }
+    .filter.active { background: var(--forest); color: white; box-shadow: 0 5px 14px rgba(16,39,31,.24); }
+
+    .section { margin: 17px 0; }
+    .section-heading {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin: 0 5px 9px;
+    }
+    .section-title { display: flex; align-items: center; gap: 9px; font-size: 1rem; font-weight: 900; }
+    .icon {
+      display: grid;
+      place-items: center;
+      width: 30px;
+      height: 30px;
+      border-radius: 10px;
+      background: #fff3d2;
+      font-size: 1rem;
+    }
+    .section-count { color: var(--muted); font-size: .78rem; font-weight: 750; }
+    .list { overflow: hidden; border: 1px solid rgba(23,33,29,.06); border-radius: 21px; background: var(--card); box-shadow: 0 8px 24px rgba(16,39,31,.08); }
+
+    .item {
+      position: relative;
+      display: flex;
+      align-items: center;
+      min-height: 62px;
+      padding: 9px 14px;
+      border-bottom: 1px solid var(--line);
+      cursor: pointer;
+      user-select: none;
+      -webkit-user-select: none;
+      transition: background .15s ease, opacity .15s ease;
+    }
+    .item:last-child { border-bottom: 0; }
+    .item:active { background: #f1f6f3; }
+    .item input { position: absolute; opacity: 0; pointer-events: none; }
+    .check {
+      display: grid;
+      flex: 0 0 auto;
+      place-items: center;
+      width: 29px;
+      height: 29px;
+      margin-right: 13px;
+      border: 2px solid #b9c2bd;
+      border-radius: 10px;
+      background: white;
+      color: white;
+      transition: all .18s ease;
+    }
+    .check svg { width: 18px; height: 18px; transform: scale(.6); opacity: 0; transition: all .18s ease; }
+    .item input:checked + .check { border-color: var(--green); background: var(--green); transform: scale(1.03); }
+    .item input:checked + .check svg { opacity: 1; transform: scale(1); }
+    .item-name { flex: 1; min-width: 0; font-size: 1rem; font-weight: 720; line-height: 1.28; }
+    .item.checked .item-name { color: #89918d; text-decoration: line-through; text-decoration-thickness: 1.5px; }
+    .item.checked { background: #f8faf9; }
+    .hidden { display: none !important; }
+
+    .empty {
+      display: none;
+      padding: 34px 20px;
+      border-radius: 20px;
+      background: white;
+      color: var(--muted);
+      text-align: center;
+      box-shadow: 0 8px 24px rgba(16,39,31,.08);
+    }
+    .empty strong { display: block; margin-bottom: 5px; color: var(--ink); font-size: 1.05rem; }
+
+    .actions { display: grid; grid-template-columns: 1fr 1fr; gap: 11px; margin-top: 22px; }
+    .action {
+      min-height: 50px;
+      border: 0;
+      border-radius: 15px;
+      font-weight: 850;
+      cursor: pointer;
+    }
+    .check-all { background: var(--forest); color: white; }
+    .reset { background: #e8e2d6; color: #514c43; }
+    .note { margin: 17px 8px 0; color: #757b77; text-align: center; font-size: .75rem; line-height: 1.45; }
+
+    .toast {
+      position: fixed;
+      left: 50%;
+      bottom: max(24px, env(safe-area-inset-bottom));
+      z-index: 30;
+      padding: 11px 16px;
+      border-radius: 14px;
+      background: #101814;
+      color: white;
+      font-size: .86rem;
+      font-weight: 750;
+      box-shadow: var(--shadow);
+      transform: translate(-50%, 24px);
+      opacity: 0;
+      pointer-events: none;
+      transition: .25s ease;
+    }
+    .toast.show { transform: translate(-50%, 0); opacity: 1; }
+
+
+    /* Five categories follow the supplied packing list */
+    .category-1 .icon { background:#d9ecff; }
+    .category-1 .list { border-left:5px solid #4f9ddd; }
+    .category-2 .icon { background:#dff4e8; }
+    .category-2 .list { border-left:5px solid #3b9b6c; }
+    .category-3 .icon { background:#fff0c4; }
+    .category-3 .list { border-left:5px solid #e9aa1b; }
+    .category-4 .icon { background:#f4e2ff; }
+    .category-4 .list { border-left:5px solid #a86bc3; }
+    .category-5 .icon { background:#ffe3dd; }
+    .category-5 .list { border-left:5px solid #df785f; }
+
+    @media (prefers-reduced-motion: reduce) { * { scroll-behavior: auto !important; transition: none !important; } }
+  </style>
+</head>
+<body>
+  <main class="app">
+    <header>
+      <div class="eyebrow">Ride ready</div>
+      <h1>Cycling Trip Packing</h1>
+      <p class="subtitle">Five packing groups for dressing, bike mounting, saddle bag, frame bag, and drop bag readiness checks.</p>
+
+      <section class="progress-card" aria-label="Packing progress">
+        <div class="progress-top">
+          <div>
+            <div class="progress-label">PACKED</div>
+            <div class="progress-count"><span id="doneCount">0</span> of <span id="totalCount">42</span> items</div>
+          </div>
+          <div class="progress-percent" id="percent">0%</div>
+        </div>
+        <div class="track" aria-hidden="true"><div class="fill" id="progressFill"></div></div>
+      </section>
+    </header>
+
+    <nav class="toolbar" aria-label="Checklist filter">
+      <button class="filter active" data-filter="all">All</button>
+      <button class="filter" data-filter="open">To pack</button>
+      <button class="filter" data-filter="done">Packed</button>
+    </nav>
+
+    <div id="checklist">
+      <section class="section category-1" data-section>
+        <div class="section-heading">
+          <div class="section-title"><span class="icon">👕</span> 1. Dress / Carry</div>
+          <span class="section-count"></span>
+        </div>
+        <div class="list">
+          <label class="item"><input type="checkbox" data-id="c1-1-helmet-capsule-light"><span class="check"><svg viewBox="0 0 24 24" fill="none"><path d="m5 12 4 4L19 6" stroke="currentColor" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span class="item-name">Helmet + Capsule Light</span></label>
+          <label class="item"><input type="checkbox" data-id="c1-2-reflective-vest"><span class="check"><svg viewBox="0 0 24 24" fill="none"><path d="m5 12 4 4L19 6" stroke="currentColor" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span class="item-name">Reflective Vest</span></label>
+          <label class="item"><input type="checkbox" data-id="c1-3-gunglass-pouch"><span class="check"><svg viewBox="0 0 24 24" fill="none"><path d="m5 12 4 4L19 6" stroke="currentColor" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span class="item-name">Gunglass + pouch</span></label>
+          <label class="item"><input type="checkbox" data-id="c1-4-cap"><span class="check"><svg viewBox="0 0 24 24" fill="none"><path d="m5 12 4 4L19 6" stroke="currentColor" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span class="item-name">Cap</span></label>
+          <label class="item"><input type="checkbox" data-id="c1-5-gloves"><span class="check"><svg viewBox="0 0 24 24" fill="none"><path d="m5 12 4 4L19 6" stroke="currentColor" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span class="item-name">Gloves</span></label>
+          <label class="item"><input type="checkbox" data-id="c1-6-socks"><span class="check"><svg viewBox="0 0 24 24" fill="none"><path d="m5 12 4 4L19 6" stroke="currentColor" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span class="item-name">Socks</span></label>
+          <label class="item"><input type="checkbox" data-id="c1-7-base-layer"><span class="check"><svg viewBox="0 0 24 24" fill="none"><path d="m5 12 4 4L19 6" stroke="currentColor" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span class="item-name">Base layer</span></label>
+          <label class="item"><input type="checkbox" data-id="c1-8-jersey"><span class="check"><svg viewBox="0 0 24 24" fill="none"><path d="m5 12 4 4L19 6" stroke="currentColor" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span class="item-name">Jersey</span></label>
+          <label class="item"><input type="checkbox" data-id="c1-9-bib"><span class="check"><svg viewBox="0 0 24 24" fill="none"><path d="m5 12 4 4L19 6" stroke="currentColor" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span class="item-name">Bib</span></label>
+          <label class="item"><input type="checkbox" data-id="c1-10-iphone-garmin-lock-case"><span class="check"><svg viewBox="0 0 24 24" fill="none"><path d="m5 12 4 4L19 6" stroke="currentColor" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span class="item-name">iPhone garmin lock case</span></label>
+        </div>
+      </section>
+
+      <section class="section category-2" data-section>
+        <div class="section-heading">
+          <div class="section-title"><span class="icon">🚲</span> 2. Bike Mounted</div>
+          <span class="section-count"></span>
+        </div>
+        <div class="list">
+          <label class="item"><input type="checkbox" data-id="c2-1-saddle-bag"><span class="check"><svg viewBox="0 0 24 24" fill="none"><path d="m5 12 4 4L19 6" stroke="currentColor" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span class="item-name">Saddle bag</span></label>
+          <label class="item"><input type="checkbox" data-id="c2-2-frame-bag"><span class="check"><svg viewBox="0 0 24 24" fill="none"><path d="m5 12 4 4L19 6" stroke="currentColor" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span class="item-name">Frame bag</span></label>
+          <label class="item"><input type="checkbox" data-id="c2-3-bottle-1"><span class="check"><svg viewBox="0 0 24 24" fill="none"><path d="m5 12 4 4L19 6" stroke="currentColor" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span class="item-name">Bottle 1</span></label>
+          <label class="item"><input type="checkbox" data-id="c2-4-clincher-tyre"><span class="check"><svg viewBox="0 0 24 24" fill="none"><path d="m5 12 4 4L19 6" stroke="currentColor" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span class="item-name">Clincher tyre</span></label>
+          <label class="item"><input type="checkbox" data-id="c2-5-bike-security-lock"><span class="check"><svg viewBox="0 0 24 24" fill="none"><path d="m5 12 4 4L19 6" stroke="currentColor" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span class="item-name">Bike Security Lock</span></label>
+          <label class="item"><input type="checkbox" data-id="c2-6-cable-tie-x-2"><span class="check"><svg viewBox="0 0 24 24" fill="none"><path d="m5 12 4 4L19 6" stroke="currentColor" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span class="item-name">Cable tie x 2</span></label>
+          <label class="item"><input type="checkbox" data-id="c2-7-garmin540-mount"><span class="check"><svg viewBox="0 0 24 24" fill="none"><path d="m5 12 4 4L19 6" stroke="currentColor" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span class="item-name">Garmin540 + mount</span></label>
+          <label class="item"><input type="checkbox" data-id="c2-8-rn1500-front-light-x-2"><span class="check"><svg viewBox="0 0 24 24" fill="none"><path d="m5 12 4 4L19 6" stroke="currentColor" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span class="item-name">RN1500 front light x 2</span></label>
+          <label class="item"><input type="checkbox" data-id="c2-9-topeak-rear-aaa-x-1"><span class="check"><svg viewBox="0 0 24 24" fill="none"><path d="m5 12 4 4L19 6" stroke="currentColor" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span class="item-name">Topeak rear + AAA x 1</span></label>
+          <label class="item"><input type="checkbox" data-id="c2-10-cateye-rear-cr2032-x-2"><span class="check"><svg viewBox="0 0 24 24" fill="none"><path d="m5 12 4 4L19 6" stroke="currentColor" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span class="item-name">Cateye rear + CR2032 x 2</span></label>
+        </div>
+      </section>
+
+      <section class="section category-3" data-section>
+        <div class="section-heading">
+          <div class="section-title"><span class="icon">👜</span> 3. Saddle bag</div>
+          <span class="section-count"></span>
+        </div>
+        <div class="list">
+          <label class="item"><input type="checkbox" data-id="c3-1-rain-jacket"><span class="check"><svg viewBox="0 0 24 24" fill="none"><path d="m5 12 4 4L19 6" stroke="currentColor" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span class="item-name">Rain jacket</span></label>
+          <label class="item"><input type="checkbox" data-id="c3-2-rain-shorts"><span class="check"><svg viewBox="0 0 24 24" fill="none"><path d="m5 12 4 4L19 6" stroke="currentColor" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span class="item-name">Rain shorts</span></label>
+          <label class="item"><input type="checkbox" data-id="c3-3-rain-cap"><span class="check"><svg viewBox="0 0 24 24" fill="none"><path d="m5 12 4 4L19 6" stroke="currentColor" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span class="item-name">Rain cap</span></label>
+          <label class="item"><input type="checkbox" data-id="c3-4-gaiter"><span class="check"><svg viewBox="0 0 24 24" fill="none"><path d="m5 12 4 4L19 6" stroke="currentColor" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span class="item-name">Gaiter</span></label>
+          <label class="item"><input type="checkbox" data-id="c3-5-arm-warmer"><span class="check"><svg viewBox="0 0 24 24" fill="none"><path d="m5 12 4 4L19 6" stroke="currentColor" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span class="item-name">Arm warmer</span></label>
+          <label class="item"><input type="checkbox" data-id="c3-6-ear-plug"><span class="check"><svg viewBox="0 0 24 24" fill="none"><path d="m5 12 4 4L19 6" stroke="currentColor" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span class="item-name">Ear plug</span></label>
+          <label class="item"><input type="checkbox" data-id="c3-7-spare-iphone"><span class="check"><svg viewBox="0 0 24 24" fill="none"><path d="m5 12 4 4L19 6" stroke="currentColor" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span class="item-name">Spare iPhone</span></label>
+        </div>
+      </section>
+
+      <section class="section category-4" data-section>
+        <div class="section-heading">
+          <div class="section-title"><span class="icon">🧰</span> 4. Frame bag</div>
+          <span class="section-count"></span>
+        </div>
+        <div class="list">
+          <label class="item"><input type="checkbox" data-id="c4-1-sunblock"><span class="check"><svg viewBox="0 0 24 24" fill="none"><path d="m5 12 4 4L19 6" stroke="currentColor" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span class="item-name">Sunblock</span></label>
+          <label class="item"><input type="checkbox" data-id="c4-2-"><span class="check"><svg viewBox="0 0 24 24" fill="none"><path d="m5 12 4 4L19 6" stroke="currentColor" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span class="item-name">防磨膏</span></label>
+          <label class="item"><input type="checkbox" data-id="c4-3-inner-tube-x-4-patch"><span class="check"><svg viewBox="0 0 24 24" fill="none"><path d="m5 12 4 4L19 6" stroke="currentColor" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span class="item-name">inner tube x 4 + patch</span></label>
+          <label class="item"><input type="checkbox" data-id="c4-4-levers-hanger-chain-open"><span class="check"><svg viewBox="0 0 24 24" fill="none"><path d="m5 12 4 4L19 6" stroke="currentColor" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span class="item-name">Levers + Hanger + Chain open</span></label>
+          <label class="item"><input type="checkbox" data-id="c4-5-hand-pump"><span class="check"><svg viewBox="0 0 24 24" fill="none"><path d="m5 12 4 4L19 6" stroke="currentColor" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span class="item-name">Hand pump</span></label>
+          <label class="item"><input type="checkbox" data-id="c4-6-elect-pump"><span class="check"><svg viewBox="0 0 24 24" fill="none"><path d="m5 12 4 4L19 6" stroke="currentColor" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span class="item-name">Elect. pump</span></label>
+          <label class="item"><input type="checkbox" data-id="c4-7-power-bank-1-usb-cable"><span class="check"><svg viewBox="0 0 24 24" fill="none"><path d="m5 12 4 4L19 6" stroke="currentColor" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span class="item-name">Power bank 1 + USB cable</span></label>
+          <label class="item"><input type="checkbox" data-id="c4-8-usb-charger-usb-cable"><span class="check"><svg viewBox="0 0 24 24" fill="none"><path d="m5 12 4 4L19 6" stroke="currentColor" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span class="item-name">USB Charger + USB cable</span></label>
+          <label class="item"><input type="checkbox" data-id="c4-9-multi-tool"><span class="check"><svg viewBox="0 0 24 24" fill="none"><path d="m5 12 4 4L19 6" stroke="currentColor" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span class="item-name">Multi-tool</span></label>
+        </div>
+      </section>
+
+      <section class="section category-5" data-section>
+        <div class="section-heading">
+          <div class="section-title"><span class="icon">📦</span> 5. Drop Bag</div>
+          <span class="section-count"></span>
+        </div>
+        <div class="list">
+          <label class="item"><input type="checkbox" data-id="c5-1-spare-chain"><span class="check"><svg viewBox="0 0 24 24" fill="none"><path d="m5 12 4 4L19 6" stroke="currentColor" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span class="item-name">Spare Chain</span></label>
+          <label class="item"><input type="checkbox" data-id="c5-2-inner-tube-x-2"><span class="check"><svg viewBox="0 0 24 24" fill="none"><path d="m5 12 4 4L19 6" stroke="currentColor" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span class="item-name">inner tube x 2</span></label>
+          <label class="item"><input type="checkbox" data-id="c5-3-socks"><span class="check"><svg viewBox="0 0 24 24" fill="none"><path d="m5 12 4 4L19 6" stroke="currentColor" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span class="item-name">Socks</span></label>
+          <label class="item"><input type="checkbox" data-id="c5-4-base-layer"><span class="check"><svg viewBox="0 0 24 24" fill="none"><path d="m5 12 4 4L19 6" stroke="currentColor" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span class="item-name">Base layer</span></label>
+          <label class="item"><input type="checkbox" data-id="c5-5-jersey"><span class="check"><svg viewBox="0 0 24 24" fill="none"><path d="m5 12 4 4L19 6" stroke="currentColor" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span class="item-name">Jersey</span></label>
+          <label class="item"><input type="checkbox" data-id="c5-6-bib"><span class="check"><svg viewBox="0 0 24 24" fill="none"><path d="m5 12 4 4L19 6" stroke="currentColor" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span class="item-name">Bib</span></label>
+        </div>
+      </section>
+    </div>
+
+    <div class="empty" id="emptyState"><strong>No items here</strong>Choose another filter to view the checklist.</div>
+
+    <div class="actions">
+      <button class="action check-all" id="checkAll">Mark all packed</button>
+      <button class="action reset" id="reset">Reset list</button>
+    </div>
+    <p class="note">Your checkmarks are saved automatically on this iPhone browser. The page also works offline after downloading.</p>
+  </main>
+
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+  <script>
+    (() => {
+      const key = 'cycling-packing-checklist-v3';
+      const inputs = [...document.querySelectorAll('.item input')];
+      const filters = [...document.querySelectorAll('.filter')];
+      const sections = [...document.querySelectorAll('[data-section]')];
+      const fill = document.getElementById('progressFill');
+      const doneCount = document.getElementById('doneCount');
+      const totalCount = document.getElementById('totalCount');
+      const percent = document.getElementById('percent');
+      const emptyState = document.getElementById('emptyState');
+      const toast = document.getElementById('toast');
+      let currentFilter = 'all';
+      let toastTimer;
+
+      const showToast = message => {
+        toast.textContent = message;
+        toast.classList.add('show');
+        clearTimeout(toastTimer);
+        toastTimer = setTimeout(() => toast.classList.remove('show'), 1700);
+      };
+
+      const save = () => {
+        const state = Object.fromEntries(inputs.map(i => [i.dataset.id, i.checked]));
+        localStorage.setItem(key, JSON.stringify(state));
+      };
+
+      const load = () => {
+        try {
+          const state = JSON.parse(localStorage.getItem(key) || '{}');
+          inputs.forEach(i => i.checked = Boolean(state[i.dataset.id]));
+        } catch (_) {}
+      };
+
+      const render = () => {
+        let visibleItems = 0;
+        inputs.forEach(input => {
+          const item = input.closest('.item');
+          item.classList.toggle('checked', input.checked);
+          const visible = currentFilter === 'all' || (currentFilter === 'done' && input.checked) || (currentFilter === 'open' && !input.checked);
+          item.classList.toggle('hidden', !visible);
+          if (visible) visibleItems++;
+        });
+
+        sections.forEach(section => {
+          const all = [...section.querySelectorAll('.item')];
+          const visible = all.filter(item => !item.classList.contains('hidden'));
+          const complete = all.filter(item => item.querySelector('input').checked).length;
+          section.classList.toggle('hidden', visible.length === 0);
+          section.querySelector('.section-count').textContent = `${complete}/${all.length}`;
+        });
+
+        emptyState.style.display = visibleItems ? 'none' : 'block';
+        const done = inputs.filter(i => i.checked).length;
+        const pct = Math.round(done / inputs.length * 100);
+        doneCount.textContent = done;
+        totalCount.textContent = inputs.length;
+        percent.textContent = `${pct}%`;
+        fill.style.width = `${pct}%`;
+      };
+
+      inputs.forEach(input => input.addEventListener('change', () => { save(); render(); }));
+      filters.forEach(button => button.addEventListener('click', () => {
+        currentFilter = button.dataset.filter;
+        filters.forEach(b => b.classList.toggle('active', b === button));
+        render();
+      }));
+
+      document.getElementById('checkAll').addEventListener('click', () => {
+        inputs.forEach(input => input.checked = true);
+        save(); render(); showToast('Everything is packed');
+      });
+
+      document.getElementById('reset').addEventListener('click', () => {
+        if (confirm('Clear all checkmarks and reset the packing list?')) {
+          inputs.forEach(input => input.checked = false);
+          save(); render(); showToast('Checklist reset');
+        }
+      });
+
+      load();
+      render();
+    })();
+  </script>
+</body>
+</html>
